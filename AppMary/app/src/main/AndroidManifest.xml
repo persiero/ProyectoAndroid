@@ -12,7 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppRestaurante">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.ReporteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.AdminProductosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.MesasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.TomarPedidoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
