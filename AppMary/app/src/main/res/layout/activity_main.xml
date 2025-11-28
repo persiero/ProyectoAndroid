@@ -82,6 +82,18 @@
             android:backgroundTint="#9C27B0"
             android:textColor="#FFFFFF"/>
 
+        <Button
+            android:id="@+id/btnClientes"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:layout_margin="8dp"
+            android:text="NUEVO\nCLIENTE"
+            android:textSize="16sp"
+            android:backgroundTint="#607D8B"
+            android:textColor="#FFFFFF"/>
+
     </GridLayout>
 
     <Button

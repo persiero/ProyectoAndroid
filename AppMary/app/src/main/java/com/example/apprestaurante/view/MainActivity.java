@@ -61,5 +61,11 @@ public class MainActivity extends AppCompatActivity {
             finish();
             Toast.makeText(this, "Sesión Cerrada", Toast.LENGTH_SHORT).show();
         });
+
+        Button btnClientes = findViewById(R.id.btnClientes);
+        btnClientes.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, RegistroClienteActivity.class));
+        });
+
     }
 }

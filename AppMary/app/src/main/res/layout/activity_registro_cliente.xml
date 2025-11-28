@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#FAFAFA">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registro de Cliente"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="24dp"/>
+
+    <EditText
+        android:id="@+id/etNombreCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre o Razón Social"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etDniRuc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="DNI o RUC"
+        android:inputType="number"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etTelefono"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Teléfono"
+        android:inputType="phone"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etDireccion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Dirección (Opcional)"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etPasswordCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contraseña (Para Login App)"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:layout_marginTop="8dp"/>
+
+    <Button
+        android:id="@+id/btnGuardarCliente"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="REGISTRAR CLIENTE"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#2196F3"/>
+
+</LinearLayout>

@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppRestaurante">
         <activity
+            android:name=".view.CatalogoClienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.RegistroClienteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegistroClienteActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.ReporteActivity"
             android:exported="false" />
         <activity

@@ -13,32 +13,44 @@ import com.example.apprestaurante.R; // Asegúrate de que esta R sea la de tu pa
 import com.example.apprestaurante.data.UsuarioDAO;
 import com.example.apprestaurante.model.Usuario;
 
+// ... imports ...
+import android.widget.Switch;
+import com.example.apprestaurante.data.ClienteDAO;
+import com.example.apprestaurante.model.Cliente;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etUsuario, etPassword;
     private Button btnIngresar;
+    private Switch switchCliente; // Nuevo
     private UsuarioDAO usuarioDAO;
+    private ClienteDAO clienteDAO; // Nuevo
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 1. Vincular vistas
         etUsuario = findViewById(R.id.etUsuario);
         etPassword = findViewById(R.id.etPassword);
         btnIngresar = findViewById(R.id.btnIngresar);
+        switchCliente = findViewById(R.id.switchModoCliente); // Nuevo
 
-        // 2. Inicializar DAO
         usuarioDAO = new UsuarioDAO(this);
+        clienteDAO = new ClienteDAO(this); // Nuevo
 
-        // 3. Configurar Botón
-        btnIngresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validarLogin();
+        // Cambio visual pequeño
+        switchCliente.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                etUsuario.setHint("Ingrese su DNI");
+                etUsuario.setText(""); // Limpiar
+                etPassword.setText("");
+            } else {
+                etUsuario.setHint("Nombre de Usuario (Admin)");
             }
         });
+
+        btnIngresar.setOnClickListener(v -> validarLogin());
     }
 
     private void validarLogin() {
@@ -46,22 +58,34 @@ public class LoginActivity extends AppCompatActivity {
         String pass = etPassword.getText().toString().trim();
 
         if (user.isEmpty() || pass.isEmpty()) {
-            Toast.makeText(this, "Por favor complete los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Complete los campos", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Consultar a la BD
-        Usuario usuarioLogueado = usuarioDAO.login(user, pass);
+        if (switchCliente.isChecked()) {
+            // --- MODO CLIENTE ---
+            Cliente cliente = clienteDAO.loginCliente(user, pass);
+            if (cliente != null) {
+                Toast.makeText(this, "Acceso Cliente Correcto", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, CatalogoClienteActivity.class);
+                intent.putExtra("NOMBRE_CLIENTE", cliente.getNombreRazonSocial());
+                startActivity(intent);
+                // No cerramos el login (finish) para que pueda volver atrás y entrar como admin si quiere
+            } else {
+                Toast.makeText(this, "DNI o Contraseña incorrectos", Toast.LENGTH_SHORT).show();
+            }
 
-        if (usuarioLogueado != null) {
-            Toast.makeText(this, "Bienvenido " + usuarioLogueado.getNombreCompleto(), Toast.LENGTH_LONG).show();
-
-            // Navegar al Menú Principal (MainActivity)
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish(); // Cierra el login para que no puedan volver atrás
         } else {
-            Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
+            // --- MODO ADMINISTRADOR (Tu código anterior) ---
+            Usuario usuario = usuarioDAO.login(user, pass);
+            if (usuario != null) {
+                Toast.makeText(this, "Bienvenido " + usuario.getNombreCompleto(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

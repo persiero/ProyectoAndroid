@@ -2,6 +2,7 @@ package com.example.apprestaurante.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.example.apprestaurante.model.DetallePedido;
 import com.example.apprestaurante.model.Pedido;
@@ -24,6 +25,8 @@ public class PedidoDAO {
             ContentValues valoresPedido = new ContentValues();
             valoresPedido.put("id_mesa", pedido.getIdMesa());
             valoresPedido.put("id_usuario", pedido.getIdUsuario());
+            valoresPedido.put("id_cliente", pedido.getIdCliente()); // NUEVO
+            valoresPedido.put("tipo_comprobante", pedido.getTipoComprobante()); // NUEVO
             valoresPedido.put("total_final", pedido.getTotal());
             valoresPedido.put("estado", "PENDIENTE");
 
@@ -63,4 +66,39 @@ public class PedidoDAO {
             db.close();
         }
     }
+
+
+
+    // Método para reporte por rango de fechas
+    // Formato de fechas esperado: "YYYY-MM-DD" (Ej: "2023-11-27")
+    public ArrayList<Pedido> buscarPedidosPorFecha(String fechaInicio, String fechaFin) {
+        ArrayList<Pedido> lista = new ArrayList<>();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // SQL: Usamos la función date() de SQLite para comparar solo la parte de la fecha (ignorando la hora)
+        String sql = "SELECT * FROM pedido WHERE date(fecha_creacion) BETWEEN ? AND ?";
+
+        Cursor cursor = db.rawQuery(sql, new String[]{fechaInicio, fechaFin});
+
+        if (cursor.moveToFirst()) {
+            do {
+                // Recuperamos los datos (0:id, 1:fecha, 2:estado, 3:total, 4:tipo, etc...)
+                // Nota: Ajusta los índices según tu tabla.
+                // En el último script: 0:id, 1:fecha, 2:estado, 3:total, 4:tipo, 5:mesa, 6:user, 7:cliente, 8:metodo
+
+                // Creamos un pedido temporal solo con los datos necesarios para el reporte
+                Pedido p = new Pedido(0, 0, 0, cursor.getString(4), cursor.getDouble(3));
+                p.setId(cursor.getInt(0)); // ID del pedido
+                // Usamos el campo "estado" temporalmente para guardar la fecha en el objeto y mostrarla
+                // (O podrías agregar un campo fecha al modelo Pedido si prefieres, pero esto es un truco rápido)
+
+                lista.add(p);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return lista;
+    }
+
+
 }
